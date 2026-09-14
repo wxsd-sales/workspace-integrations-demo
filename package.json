@@ -1,0 +1,26 @@
+{
+  "name": "workspace-integrations-demo",
+  "version": "1.0.0",
+  "description": "A demo of workspace integrations for Cisco Webex.",
+  "license": "MIT",
+  "author": "William Mills",
+  "scripts": {
+    "serve": "node scripts/serve.mjs",
+    "devProxy": "node scripts/dev-proxy.mjs",
+    "screenshots": "node scripts/screenshot.mjs",
+    "deploy:macro": "node scripts/deploy-macro.mjs",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.8.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.9.0",
+    "prettier": "^3.9.6"
+  }
+}

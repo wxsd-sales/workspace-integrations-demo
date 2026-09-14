@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="theme.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@momentum-design/icons@0.54.0/dist/data/MomentumFontIcons.css"
+      integrity="sha384-cRTwUMmzKBtfI4txd/iehWhZp7TowC6EHDTTfeR4fA88pF5oezPFRmSCub32x7JR"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@momentum-design/tokens@0.10.4/dist/css/theme/webex/light-stable.css"
+      integrity="sha384-aHuoM9vQGc4bIdjh/+QTsoAEtH5+fnRhLomr3VcTcFxTrheFiGnt26SoPv05oTWI"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@momentum-design/tokens@0.10.4/dist/css/theme/webex/dark-stable.css"
+      integrity="sha384-xo4f17YKVYq4xv2I3xxGoS+l3GhukPTuhpQTP7FT+M0nq9gCMQkzpohl5DJo6Zom"
+      crossorigin="anonymous"
+    />
+    <title>Workspace Integrations Demo</title>
+    <script src="app-config.js"></script>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="app-header__brand">
+        <span class="app-header__product" id="app-product"
+          >Workspace Integrations Demo</span
+        >
+      </div>
+      <div class="app-header__actions">
+        <a
+          class="source-link"
+          id="source-link"
+          href="https://github.com/wxsd-sales"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="View source code on GitHub"
+          title="View source code on GitHub"
+        >
+          <span class="source-link__icon" aria-hidden="true"></span>
+        </a>
+        <div class="theme-select" id="theme-select" data-open="false">
+          <button
+            id="theme-select-button"
+            class="secondary-button theme-select-button"
+            type="button"
+            aria-haspopup="listbox"
+            aria-expanded="false"
+          >
+            <span
+              id="theme-select-current-icon"
+              class="icon icon-laptop-regular theme-select-current-icon"
+              aria-hidden="true"
+            ></span>
+            <span id="theme-select-label">System</span>
+            <span
+              class="icon icon-arrow-triangle-down-filled theme-select-caret"
+              aria-hidden="true"
+            ></span>
+          </button>
+          <div
+            id="theme-select-menu"
+            class="theme-select-menu"
+            role="listbox"
+            aria-label="Theme"
+            hidden
+          >
+            <button
+              class="theme-select-option"
+              type="button"
+              role="option"
+              data-theme-choice="system"
+              aria-selected="true"
+            >
+              <span class="icon icon-laptop-regular" aria-hidden="true"></span>
+              <span>System</span>
+            </button>
+            <button
+              class="theme-select-option"
+              type="button"
+              role="option"
+              data-theme-choice="light"
+              aria-selected="false"
+            >
+              <span
+                class="icon icon-brightness-high-filled"
+                aria-hidden="true"
+              ></span>
+              <span>Light</span>
+            </button>
+            <button
+              class="theme-select-option"
+              type="button"
+              role="option"
+              data-theme-choice="dark"
+              aria-selected="false"
+            >
+              <span
+                class="icon icon-quiet-hours-presence-filled"
+                aria-hidden="true"
+              ></span>
+              <span>Dark</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <div class="app-content">
+        <div class="tab-bar" role="tablist" aria-label="Workspace integration steps">
+          <button
+            class="tab"
+            id="tab-create"
+            type="button"
+            role="tab"
+            aria-selected="true"
+            aria-controls="create"
+            data-tab-target="create"
+          >
+            <span class="icon icon-plus-regular" aria-hidden="true"></span>
+            <span class="tab__label">Create Integration</span>
+          </button>
+          <button
+            class="tab"
+            id="tab-setup"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="setup"
+            tabindex="-1"
+            data-tab-target="setup"
+          >
+            <span class="icon icon-settings-regular" aria-hidden="true"></span>
+            <span class="tab__label">Control Hub Setup</span>
+          </button>
+          <button
+            class="tab"
+            id="tab-monitor"
+            type="button"
+            role="tab"
+            aria-selected="false"
+            aria-controls="monitor"
+            tabindex="-1"
+            data-tab-target="monitor"
+          >
+            <span class="icon icon-integrations-regular" aria-hidden="true"></span>
+            <span class="tab__label">Activate &amp; Monitor</span>
+          </button>
+        </div>
+
+        <div class="page-stack" aria-live="polite">
+          <section
+            class="panel-card"
+            id="create"
+            role="tabpanel"
+            aria-labelledby="tab-create"
+            tabindex="0"
+          >
+            <h2>Create Integration</h2>
+            <p>
+              Download a new Workspace Integration manifest, then continue on
+              <strong>Control Hub Setup</strong> to upload it under
+              <strong>Workspaces &gt; Integrations</strong>. Control Hub returns
+              a Client ID, Client Secret, and activation code for the next tab.
+            </p>
+
+            <form class="config-form" id="manifest-form" autocomplete="off">
+              <div class="field">
+                <label class="field__label" for="manifest-name">Display name</label>
+                <input
+                  class="field__input"
+                  type="text"
+                  id="manifest-name"
+                  name="manifest-name"
+                  maxlength="80"
+                  placeholder="Workspace Integrations Demo"
+                />
+              </div>
+              <div class="field-row">
+                <div class="field">
+                  <label class="field__label" for="manifest-vendor">Vendor</label>
+                  <input
+                    class="field__input"
+                    type="text"
+                    id="manifest-vendor"
+                    name="manifest-vendor"
+                    maxlength="80"
+                    placeholder="WXSD"
+                  />
+                </div>
+                <div class="field">
+                  <label class="field__label" for="manifest-email">Support email</label>
+                  <input
+                    class="field__input"
+                    type="email"
+                    id="manifest-email"
+                    name="manifest-email"
+                    maxlength="120"
+                    placeholder="wxsd@external.cisco.com"
+                    autocomplete="off"
+                  />
+                </div>
+              </div>
+              <div class="field">
+                <label class="field__label" for="manifest-description">Description</label>
+                <textarea
+                  class="field__input field__textarea"
+                  id="manifest-description"
+                  name="manifest-description"
+                  maxlength="500"
+                  rows="3"
+                ></textarea>
+              </div>
+            </form>
+
+            <div class="code-output">
+              <div class="code-output__header">
+                <span class="field__label">Generated manifest</span>
+                <div class="code-output__actions">
+                  <button
+                    id="toggle-manifest"
+                    type="button"
+                    class="secondary-button"
+                    aria-expanded="false"
+                    aria-controls="manifest-pre"
+                  >
+                    Show manifest
+                  </button>
+                  <button
+                    id="download-manifest"
+                    type="button"
+                    class="icon-button icon-button--with-label"
+                  >
+                    <span
+                      class="icon icon-download-bold"
+                      aria-hidden="true"
+                    ></span>
+                    <span class="icon-button__label">Download manifest</span>
+                  </button>
+                </div>
+              </div>
+              <pre class="code-output__command" id="manifest-pre" hidden><code id="manifest-preview"></code></pre>
+              <p
+                class="export-status"
+                id="create-status"
+                role="status"
+                aria-live="polite"
+              ></p>
+            </div>
+          </section>
+
+          <section
+            class="panel-card"
+            id="setup"
+            role="tabpanel"
+            aria-labelledby="tab-setup"
+            tabindex="0"
+            hidden
+          >
+            <h2>Control Hub Setup</h2>
+            <p>
+              Upload the downloaded manifest in Control Hub, then copy the
+              Client ID, Client Secret, and activation code. Use a shared-mode
+              Webex device in a workspace. Personal-mode devices do not send these
+              notifications.
+            </p>
+            <ol class="setup-steps">
+              <li>
+                On <strong>Create Integration</strong>, click
+                <strong>Download manifest</strong> to save the JSON file.
+              </li>
+              <li>
+                In
+                <a
+                  href="https://admin.webex.com/workspaces/integrations"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Control Hub</a
+                >
+                go to <strong>Workspaces &gt; Integrations</strong>. Choose
+                <strong>Add integration</strong> or
+                <strong>Upload integration</strong> and select the downloaded
+                file.
+              </li>
+              <li>
+                Copy the <strong>Client ID</strong> and
+                <strong>Client Secret</strong>. This demo keeps them in browser
+                memory for the session only. They are not saved or written to
+                disk.
+              </li>
+              <li>
+                Open the new integration, choose <strong>Activate</strong>,
+                and copy the <strong>activation code</strong>. It is a JWT
+                that this app decodes for <code>oauthUrl</code>,
+                <code>appUrl</code>, and a redacted <code>refreshToken</code>.
+              </li>
+              <li>
+                Continue on <strong>Activate &amp; Monitor</strong> and paste
+                the three values. Click
+                <strong>Activate &amp; Monitor</strong> when you are ready.
+              </li>
+            </ol>
+          </section>
+
+          <section
+            class="panel-card"
+            id="monitor"
+            role="tabpanel"
+            aria-labelledby="tab-monitor"
+            tabindex="0"
+            hidden
+          >
+            <h2>Activate and Monitor Integration</h2>
+            <p>
+              Paste the Client ID, Client Secret, and activation code from
+              Control Hub. Optionally show the decoded JWT payload. Click
+              <strong>Activate &amp; Monitor</strong> to exchange the
+              refresh token for an access token, look up workspace names,
+              activate long polling, and stream device xStatus and xEvent
+              notifications.
+            </p>
+
+            <form class="config-form" id="activate-form" autocomplete="off">
+              <div class="field">
+                <label class="field__label" for="client-id">Client ID</label>
+                <input
+                  class="field__input"
+                  type="text"
+                  id="client-id"
+                  name="client-id"
+                  maxlength="256"
+                  spellcheck="false"
+                  autocomplete="off"
+                  placeholder="Client ID from Control Hub"
+                />
+              </div>
+              <div class="field">
+                <label class="field__label" for="client-secret">Client Secret</label>
+                <input
+                  class="field__input"
+                  type="password"
+                  id="client-secret"
+                  name="client-secret"
+                  maxlength="512"
+                  spellcheck="false"
+                  autocomplete="new-password"
+                  placeholder="Client Secret from Control Hub"
+                />
+                <span class="field__hint"
+                  >Kept in browser memory only for this session. It is not saved
+                  or written to disk.</span
+                >
+              </div>
+              <div class="field">
+                <label class="field__label" for="activation-code">Activation Code</label>
+                <textarea
+                  class="field__input field__textarea field__mono"
+                  id="activation-code"
+                  name="activation-code"
+                  maxlength="8192"
+                  rows="5"
+                  spellcheck="false"
+                  autocomplete="off"
+                  placeholder="JWT activation code from Control Hub"
+                ></textarea>
+              </div>
+            </form>
+
+            <p class="credentials-placeholder" id="activate-hidden-notice" hidden>
+              Monitoring is active. Click <strong>Stop monitoring</strong> to
+              show Client ID, Client Secret, and Activation Code again.
+            </p>
+
+            <div class="decoded-box" id="decoded-summary" hidden>
+              <div class="code-output__header">
+                <span class="field__label">Decoded activation payload</span>
+                <button
+                  id="toggle-payload"
+                  type="button"
+                  class="secondary-button"
+                  aria-expanded="false"
+                  aria-controls="decoded-pre"
+                >
+                  Show payload
+                </button>
+              </div>
+              <pre class="code-output__command" id="decoded-pre" hidden><code id="decoded-body"></code></pre>
+            </div>
+
+            <div class="step-actions">
+              <button
+                id="start-monitor"
+                type="button"
+                class="icon-button icon-button--with-label"
+                disabled
+              >
+                <span
+                  class="icon icon-play-circle-filled"
+                  aria-hidden="true"
+                ></span>
+                <span class="icon-button__label">Activate &amp; Monitor</span>
+              </button>
+              <button
+                id="stop-monitor"
+                type="button"
+                class="icon-button icon-button--with-label secondary-button"
+                disabled
+              >
+                <span
+                  class="icon icon-stop-circle-filled"
+                  aria-hidden="true"
+                ></span>
+                <span class="icon-button__label">Stop monitoring</span>
+              </button>
+              <button
+                id="bookmark-integration"
+                type="button"
+                class="icon-button icon-button--with-label secondary-button"
+                disabled
+                title="Save Client ID, Client Secret, and activation code in this page URL so you can bookmark it"
+              >
+                <span
+                  class="icon icon-bookmark-regular"
+                  aria-hidden="true"
+                ></span>
+                <span class="icon-button__label">Bookmark</span>
+              </button>
+            </div>
+
+            <p
+              class="export-status"
+              id="monitor-status"
+              role="status"
+              aria-live="polite"
+            ></p>
+
+            <div class="stat-row" id="monitor-stats" hidden></div>
+
+            <div class="monitor-section" id="message-chart-section" hidden>
+              <h3 class="section-title">
+                <span
+                  class="icon icon-area-chart-regular"
+                  aria-hidden="true"
+                ></span>
+                Messages Received
+              </h3>
+              <div class="message-chart" id="message-chart"></div>
+            </div>
+
+            <div class="monitor-section" id="panel-install" hidden>
+              <h3 class="section-title">
+                <span class="icon icon-tap-regular" aria-hidden="true"></span>
+                Install demo panel
+              </h3>
+              <p>
+                Search a workspace or RoomOS product name, then save a
+                home-screen button named
+                <strong>Workspace Integration Demo</strong>. Only RoomOS devices
+                with xAPI are listed. Tapping the button sends a
+                <code>UserInterface.Extensions.Panel.Clicked</code>
+                event. This app shows that event and displays an on-screen alert
+                on the same device.
+              </p>
+              <div class="field">
+                <label class="field__label" for="device-search">Search workspace or device</label>
+                <form class="search-row" id="device-search-form" autocomplete="off">
+                  <input
+                    class="field__input"
+                    type="search"
+                    id="device-search"
+                    name="device-search"
+                    maxlength="120"
+                    spellcheck="false"
+                    autocomplete="off"
+                    placeholder="Focus Room, Board Room"
+                  />
+                  <button
+                    id="device-search-button"
+                    type="submit"
+                    class="icon-button icon-button--with-label secondary-button"
+                  >
+                    <span class="icon icon-search-regular" aria-hidden="true"></span>
+                    <span class="icon-button__label">Search</span>
+                  </button>
+                </form>
+              </div>
+              <div class="device-results" id="device-search-results"></div>
+            </div>
+
+            <div class="monitor-section">
+              <h3 class="section-title">
+                <span
+                  class="icon icon-device-in-room-regular"
+                  aria-hidden="true"
+                ></span>
+                Workspaces
+              </h3>
+              <div class="workspace-list" id="workspace-grid"></div>
+            </div>
+
+            <div class="monitor-section">
+              <h3 class="section-title">
+                <span
+                  class="icon icon-cloud-download-regular"
+                  aria-hidden="true"
+                ></span>
+                Live notifications
+              </h3>
+              <div
+                class="activity-feed"
+                id="activity-feed"
+                aria-live="polite"
+              ></div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
