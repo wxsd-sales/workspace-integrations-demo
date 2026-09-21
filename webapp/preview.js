@@ -5,14 +5,20 @@
 
 const PREVIEW_MODES = new Set(["create", "setup", "activate", "monitor"]);
 
+const PREVIEW_ORG_UUID = "00000000-0000-4000-8000-000000000000";
 export const PREVIEW_MANIFEST_ID = "00000000-0000-4000-8000-000000000001";
-export const PREVIEW_ORG_NAME = "COE";
+export const PREVIEW_ORG_NAME = "Demo Org";
 
 export const PREVIEW_CLIENT_ID = "C0demo00000000000000000000000000";
 export const PREVIEW_CLIENT_SECRET = "demo-client-secret-example";
 
+export const PREVIEW_APP_URL = `https://xapi-r.wbx2.com/xapi/api/organizations/${PREVIEW_ORG_UUID}/apps/${PREVIEW_MANIFEST_ID}`;
+
 function encodeBase64Url(value) {
-  return btoa(value).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+  return btoa(value)
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/g, "");
 }
 
 export function buildPreviewJwt() {
@@ -21,13 +27,13 @@ export function buildPreviewJwt() {
     JSON.stringify({
       oauthUrl: "https://webexapis.com/v1/access_token",
       orgName: PREVIEW_ORG_NAME,
-      appUrl:
-        "https://xapi-r.wbx2.com/xapi/api/organizations/00000000-0000-4000-8000-000000000000/apps/00000000-0000-4000-8000-000000000001",
+      appUrl: PREVIEW_APP_URL,
       webexapisBaseUrl: "https://webexapis.com/v1",
       refreshToken: "demo-refresh-token-example",
       expiryTime: "2099-01-01T00:00:00.000Z",
       action: "provision",
-      scopes: "spark-admin:workspaces_read,spark:xapi_statuses,spark:xapi_commands",
+      scopes:
+        "spark-admin:workspaces_read,spark:xapi_statuses,spark:xapi_commands",
       region: "us-west-2_r",
       appId: PREVIEW_MANIFEST_ID,
       xapiAccess: JSON.stringify({
@@ -36,7 +42,11 @@ export function buildPreviewJwt() {
           "UserInterface.Message.Alert.Display",
         ],
         statuses: ["RoomAnalytics.*", "Standby.State"],
-        events: ["BootEvent", "CallSuccessful", "UserInterface.Extensions.Panel.Clicked"],
+        events: [
+          "BootEvent",
+          "CallSuccessful",
+          "UserInterface.Extensions.Panel.Clicked",
+        ],
       }),
     }),
   );
@@ -47,6 +57,8 @@ export const PREVIEW_WORKSPACES = [
   { id: "workspace-focus", displayName: "Focus Room" },
   { id: "workspace-board", displayName: "Board Room" },
   { id: "workspace-huddle", displayName: "Huddle Space" },
+  { id: "workspace-lobby", displayName: "Lobby Kiosk" },
+  { id: "workspace-training", displayName: "Training Room" },
 ];
 
 export const PREVIEW_DEVICES = [
@@ -68,6 +80,18 @@ export const PREVIEW_DEVICES = [
     product: "Cisco Webex Desk Pro",
     workspaceId: "workspace-huddle",
   },
+  {
+    id: "device-desk-mini",
+    displayName: "Desk Mini",
+    product: "Cisco Webex Desk Mini",
+    workspaceId: "workspace-lobby",
+  },
+  {
+    id: "device-room-kit",
+    displayName: "Room Kit",
+    product: "Cisco Webex Room Kit",
+    workspaceId: "workspace-training",
+  },
 ];
 
 export const PREVIEW_NOW = "2026-09-07T14:06:00.000Z";
@@ -76,14 +100,19 @@ const PREVIEW_DEVICE_REFS = [
   ["workspace-focus", "device-kit-pro"],
   ["workspace-board", "device-board-pro"],
   ["workspace-huddle", "device-desk-pro"],
+  ["workspace-lobby", "device-desk-mini"],
+  ["workspace-training", "device-room-kit"],
 ];
 
 function previewTimestamp(minutesFromNow) {
-  return new Date(Date.parse(PREVIEW_NOW) + minutesFromNow * 60_000).toISOString();
+  return new Date(
+    Date.parse(PREVIEW_NOW) + minutesFromNow * 60_000,
+  ).toISOString();
 }
 
 function previewStatusPing(minutesFromNow, index) {
-  const [workspaceId, deviceId] = PREVIEW_DEVICE_REFS[index % PREVIEW_DEVICE_REFS.length];
+  const [workspaceId, deviceId] =
+    PREVIEW_DEVICE_REFS[index % PREVIEW_DEVICE_REFS.length];
   return {
     workspaceId,
     deviceId,
@@ -115,8 +144,11 @@ const PREVIEW_CHART_CURVE = [
   [-8, 2],
 ];
 
-const PREVIEW_CHART_TRAFFIC = PREVIEW_CHART_CURVE.flatMap(([offset, count], row) =>
-  Array.from({ length: count }, (_, index) => previewStatusPing(offset, row + index)),
+const PREVIEW_CHART_TRAFFIC = PREVIEW_CHART_CURVE.flatMap(
+  ([offset, count], row) =>
+    Array.from({ length: count }, (_, index) =>
+      previewStatusPing(offset, row + index),
+    ),
 );
 
 export const PREVIEW_CHART_TIMES = PREVIEW_CHART_TRAFFIC.map(
@@ -150,10 +182,7 @@ export const PREVIEW_MESSAGES = [
         "Standby.State": "Halfwake",
         "SystemUnit.State.NumberOfActiveCalls": 0,
       },
-      removed: [
-        "Bookings.Current.Id",
-        "Bookings.Current.Organizer.Name",
-      ],
+      removed: ["Bookings.Current.Id", "Bookings.Current.Organizer.Name"],
     },
   },
   {
@@ -200,10 +229,7 @@ export const PREVIEW_MESSAGES = [
         "SystemUnit.State.NumberOfActiveCalls": 1,
         "RoomAnalytics.AmbientTemperature": 22.5,
       },
-      removed: [
-        "Bookings.Current.Id",
-        "Bookings.Current.Organizer.Name",
-      ],
+      removed: ["Bookings.Current.Id", "Bookings.Current.Organizer.Name"],
     },
   },
   {
@@ -231,4 +257,15 @@ export function readPreviewMode() {
   } catch {
     return "";
   }
+}
+
+// True when the Activate & Monitor fields hold the exact "Demo Integration"
+// values (same as the screenshot preview fixtures), so activation can run a
+// simulated integration instead of calling the real Webex APIs.
+export function isDemoCredentials(clientId, clientSecret, activationCode) {
+  return (
+    clientId === PREVIEW_CLIENT_ID &&
+    clientSecret === PREVIEW_CLIENT_SECRET &&
+    activationCode === buildPreviewJwt()
+  );
 }

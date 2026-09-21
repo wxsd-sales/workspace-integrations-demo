@@ -23,7 +23,7 @@ function appendText(parent, text, className) {
   parent.append(node);
 }
 
-function renderValue(parent, value, indent, highlightKeys) {
+function renderValue(parent, value, indent, highlightKeys, highlightTitle) {
   if (value === null) {
     appendText(parent, "null", "json-null");
     return;
@@ -33,7 +33,11 @@ function renderValue(parent, value, indent, highlightKeys) {
     return;
   }
   if (typeof value === "number") {
-    appendText(parent, Number.isFinite(value) ? String(value) : "null", "json-number");
+    appendText(
+      parent,
+      Number.isFinite(value) ? String(value) : "null",
+      "json-number",
+    );
     return;
   }
   if (typeof value === "string") {
@@ -50,7 +54,7 @@ function renderValue(parent, value, indent, highlightKeys) {
       const line = document.createElement("span");
       line.className = "json-line";
       appendText(line, "  ".repeat(indent + 1));
-      renderValue(line, item, indent + 1, highlightKeys);
+      renderValue(line, item, indent + 1, highlightKeys, highlightTitle);
       if (index < value.length - 1) {
         appendText(line, ",", "json-punctuation");
       }
@@ -71,12 +75,12 @@ function renderValue(parent, value, indent, highlightKeys) {
       const used = highlightKeys.has(key);
       line.className = used ? "json-line json-line--used" : "json-line";
       if (used) {
-        line.title = "Used by this web app";
+        line.title = highlightTitle;
       }
       appendText(line, "  ".repeat(indent + 1));
       appendText(line, JSON.stringify(key), "json-key");
       appendText(line, ": ", "json-punctuation");
-      renderValue(line, value[key], indent + 1, highlightKeys);
+      renderValue(line, value[key], indent + 1, highlightKeys, highlightTitle);
       if (index < keys.length - 1) {
         appendText(line, ",", "json-punctuation");
       }
@@ -88,18 +92,23 @@ function renderValue(parent, value, indent, highlightKeys) {
   appendText(parent, JSON.stringify(String(value)), "json-string");
 }
 
-export function renderJsonPreview(target, value, { highlightUsedKeys = false } = {}) {
+export function renderJsonPreview(
+  target,
+  value,
+  {
+    highlightUsedKeys = false,
+    highlightKeys = null,
+    highlightTitle = "Used by this web app",
+  } = {},
+) {
   if (!target) {
     return;
   }
   target.replaceChildren();
+  const keys =
+    highlightKeys || (highlightUsedKeys ? USED_ACTIVATION_KEYS : new Set());
   try {
-    renderValue(
-      target,
-      value,
-      0,
-      highlightUsedKeys ? USED_ACTIVATION_KEYS : new Set(),
-    );
+    renderValue(target, value, 0, keys, highlightTitle);
   } catch {
     target.textContent = "";
     appendText(target, String(value));

@@ -9,7 +9,6 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const WEBAPP = join(ROOT, "webapp");
 const OUT_DIR = join(ROOT, "screenshots");
 const DEFAULT_WIDTH = Number(process.env.SCREENSHOT_WIDTH) || 1280;
-const DEFAULT_HEIGHT = Number(process.env.SCREENSHOT_HEIGHT) || 860;
 
 function isExecutable(candidate) {
   if (candidate.includes("/") || candidate.includes("\\")) {
@@ -92,25 +91,43 @@ const targets = [
     name: "readme-screenshot-create",
     path: "/?preview=create",
     width: DEFAULT_WIDTH,
-    height: DEFAULT_HEIGHT,
+    height: 2000,
   },
   {
     name: "readme-screenshot-setup",
     path: "/?preview=setup",
     width: DEFAULT_WIDTH,
-    height: DEFAULT_HEIGHT,
+    height: 620,
   },
   {
     name: "readme-screenshot-activate",
     path: "/?preview=activate",
     width: DEFAULT_WIDTH,
-    height: 1080,
+    height: 1750,
   },
   {
     name: "readme-screenshot-monitor",
     path: "/?preview=monitor",
     width: DEFAULT_WIDTH,
-    height: 2480,
+    height: 4700,
+  },
+  {
+    name: "readme-screenshot-activation",
+    path: "/?preview=monitor&focus=activation",
+    width: DEFAULT_WIDTH,
+    height: 2950,
+  },
+  {
+    name: "readme-screenshot-long-polling",
+    path: "/?preview=monitor&focus=long-polling",
+    width: DEFAULT_WIDTH,
+    height: 2000,
+  },
+  {
+    name: "readme-screenshot-discovery",
+    path: "/?preview=monitor&focus=discovery",
+    width: DEFAULT_WIDTH,
+    height: 3350,
   },
 ];
 

@@ -25,7 +25,10 @@ function isAllowedHost(hostname, { allowXapi } = {}) {
     return true;
   }
   if (allowXapi && (host === "wbx2.com" || host.endsWith(".wbx2.com"))) {
-    return /^[a-z0-9-]+(?:\.[a-z0-9-]+)*\.wbx2\.com$/.test(host) || host === "wbx2.com";
+    return (
+      /^[a-z0-9-]+(?:\.[a-z0-9-]+)*\.wbx2\.com$/.test(host) ||
+      host === "wbx2.com"
+    );
   }
   return false;
 }
@@ -42,7 +45,7 @@ function proxiedRequestUrl(targetUrl) {
   return `/proxy?url=${encodeURIComponent(targetUrl)}`;
 }
 
-export function assertAllowedWebexUrl(raw, { allowXapi = false } = {}) {
+function assertAllowedWebexUrl(raw, { allowXapi = false } = {}) {
   let url;
   try {
     url = new URL(raw);
@@ -82,7 +85,9 @@ export function isJwtShape(value) {
 export function decodeActivationJwt(token) {
   const raw = String(token || "").trim();
   if (!isJwtShape(raw)) {
-    throw new Error("Activation code must be a JWT with three dot-separated parts.");
+    throw new Error(
+      "Activation code must be a JWT with three dot-separated parts.",
+    );
   }
   const [, payloadPart] = raw.split(".");
   let payload;
@@ -176,14 +181,78 @@ async function readJson(response) {
   }
 }
 
+// Redacted request/response snapshots for the "How this works" panels, keyed
+// by a caller-supplied logKey. Demo-only: not used for retries or auth.
+const requestLog = new Map();
+
+export function getRequestLog(logKey) {
+  return requestLog.get(logKey) || null;
+}
+
+export function clearRequestLog() {
+  requestLog.clear();
+}
+
+// Lets the README screenshot fixture (preview.js data, no network access)
+// populate the "Show requests" panels with a realistic example exchange.
+export function primeRequestLogForPreview(logKey, entry) {
+  requestLog.set(logKey, entry);
+}
+
+function redactHeaders(headers) {
+  const out = {};
+  headers.forEach((value, key) => {
+    out[key] = /^authorization$/i.test(key) ? "Bearer ***" : value;
+  });
+  return out;
+}
+
+function redactRequestBody(logKey, body) {
+  if (body instanceof URLSearchParams) {
+    const clone = new URLSearchParams(body);
+    if (logKey === "token") {
+      if (clone.has("client_secret")) clone.set("client_secret", "***");
+      if (clone.has("refresh_token")) clone.set("refresh_token", "***");
+    }
+    return Object.fromEntries(clone.entries());
+  }
+  if (typeof body === "string") {
+    try {
+      return JSON.parse(body);
+    } catch {
+      return body;
+    }
+  }
+  return body ?? null;
+}
+
+function redactResponseBody(logKey, body) {
+  if (logKey === "token" && body && typeof body === "object") {
+    const clone = { ...body };
+    if (clone.access_token) clone.access_token = "[redacted]";
+    if (clone.refresh_token) clone.refresh_token = "[redacted]";
+    return clone;
+  }
+  return body;
+}
+
 async function requestJson(url, options = {}) {
-  const { allowXapi = false, ...fetchOptions } = options;
+  const { allowXapi = false, logKey = null, ...fetchOptions } = options;
   const safeUrl = assertAllowedWebexUrl(url, { allowXapi });
   const headers = new Headers(fetchOptions.headers || {});
   if (!headers.has("Accept")) {
     headers.set("Accept", "application/json");
   }
   headers.set("Cache-Control", "no-store");
+
+  const snapshot = logKey
+    ? {
+        method: fetchOptions.method || "GET",
+        url: safeUrl,
+        headers: redactHeaders(headers),
+        body: redactRequestBody(logKey, fetchOptions.body),
+      }
+    : null;
 
   let response;
   try {
@@ -195,12 +264,28 @@ async function requestJson(url, options = {}) {
       referrerPolicy: "no-referrer",
     });
   } catch (error) {
-    throw new Error(describeNetworkError(error));
+    if (snapshot) {
+      requestLog.set(logKey, {
+        ...snapshot,
+        error: describeNetworkError(error),
+      });
+    }
+    throw new Error(describeNetworkError(error), { cause: error });
   }
 
   const body = await readJson(response);
+  if (snapshot) {
+    requestLog.set(logKey, {
+      ...snapshot,
+      status: response.status,
+      responseBody: redactResponseBody(logKey, body),
+      receivedAt: Date.now(),
+    });
+  }
   if (!response.ok) {
-    throw new Error(describeHttpError(response.status, body.message || body.raw));
+    throw new Error(
+      describeHttpError(response.status, body.message || body.raw),
+    );
   }
   return { body, response };
 }
@@ -227,6 +312,7 @@ export async function createAccessToken({
     },
     body: params,
     signal,
+    logKey: "token",
   });
 
   const accessToken = String(body.access_token || "").trim();
@@ -240,7 +326,9 @@ export async function createAccessToken({
     refreshToken: String(body.refresh_token || refreshToken).trim(),
     expiresAt:
       Date.now() +
-      (Number.isFinite(expiresIn) && expiresIn > 0 ? expiresIn * 1000 : 50 * 60 * 1000),
+      (Number.isFinite(expiresIn) && expiresIn > 0
+        ? expiresIn * 1000
+        : 50 * 60 * 1000),
   };
 }
 
@@ -281,7 +369,14 @@ function parseNextLink(linkHeader) {
   return "";
 }
 
-async function listCollection(baseUrl, path, accessToken, signal, extraParams = {}) {
+async function listCollection(
+  baseUrl,
+  path,
+  accessToken,
+  signal,
+  extraParams = {},
+  logKey = null,
+) {
   const items = [];
   const query = new URLSearchParams({ max: String(LIST_PAGE_SIZE) });
   for (const [key, value] of Object.entries(extraParams)) {
@@ -299,6 +394,7 @@ async function listCollection(baseUrl, path, accessToken, signal, extraParams = 
         Authorization: `Bearer ${accessToken}`,
       },
       signal,
+      logKey: page === 0 ? logKey : null,
     });
     if (Array.isArray(body.items)) {
       items.push(...body.items);
@@ -311,14 +407,25 @@ async function listCollection(baseUrl, path, accessToken, signal, extraParams = 
 }
 
 export async function listWorkspaces(baseUrl, accessToken, signal) {
-  return listCollection(baseUrl, "workspaces", accessToken, signal);
+  return listCollection(
+    baseUrl,
+    "workspaces",
+    accessToken,
+    signal,
+    {},
+    "workspaces",
+  );
 }
 
 export async function listDevices(baseUrl, accessToken, signal) {
-  return listCollection(baseUrl, "devices", accessToken, signal, {
-    type: "roomdesk",
-    capability: "xapi",
-  });
+  return listCollection(
+    baseUrl,
+    "devices",
+    accessToken,
+    signal,
+    { type: "roomdesk", capability: "xapi" },
+    "devices",
+  );
 }
 
 export async function activateQueue(appUrl, accessToken, signal) {
@@ -336,11 +443,14 @@ export async function activateQueue(appUrl, accessToken, signal) {
       },
     }),
     signal,
+    logKey: "activate",
   });
 
   const pollUrl = body?.queue?.pollUrl;
   if (!pollUrl) {
-    throw new Error("Activation succeeded, but Webex did not return a queue poll URL.");
+    throw new Error(
+      "Activation succeeded, but Webex did not return a queue poll URL.",
+    );
   }
   return {
     pollUrl: assertAllowedWebexUrl(pollUrl, { allowXapi: true }),
@@ -349,9 +459,18 @@ export async function activateQueue(appUrl, accessToken, signal) {
 }
 
 const ALLOWED_XAPI_COMMANDS = new Set([
+  "UserInterface.Extensions.List",
   "UserInterface.Extensions.Panel.Save",
+  "UserInterface.Extensions.Panel.Clicked",
+  "UserInterface.Extensions.Panel.Remove",
   "UserInterface.Message.Alert.Display",
 ]);
+
+const XAPI_COMMAND_LOG_KEYS = {
+  "UserInterface.Extensions.Panel.Save": "panelSave",
+  "UserInterface.Extensions.Panel.Clicked": "panelClicked",
+  "UserInterface.Extensions.Panel.Remove": "panelRemove",
+};
 
 export async function executeXapiCommand({
   baseUrl,
@@ -385,6 +504,7 @@ export async function executeXapiCommand({
     },
     body: JSON.stringify(payload),
     signal,
+    logKey: XAPI_COMMAND_LOG_KEYS[command] || null,
   });
 }
 
@@ -396,6 +516,7 @@ export async function pollQueue(pollUrl, accessToken, signal) {
       Authorization: `Bearer ${accessToken}`,
     },
     signal,
+    logKey: "poll",
   });
 
   const messages = Array.isArray(body.messages) ? body.messages : [];
@@ -408,7 +529,7 @@ export async function pollQueue(pollUrl, accessToken, signal) {
   };
 }
 
-export function shortId(value) {
+function shortId(value) {
   const text = String(value || "");
   return text.length <= 12 ? text || "unknown" : text.slice(-12);
 }

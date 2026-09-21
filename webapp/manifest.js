@@ -45,6 +45,18 @@ const SUPPORTED_EVENTS = [
   { path: "UserInterface.WebView.Cleared", access: "required" },
 ];
 
+const SUPPORTED_COMMANDS = [
+  { path: "UserInterface.Extensions.Icon.List", access: "required" },
+  { path: "UserInterface.Extensions.List", access: "required" },
+  { path: "UserInterface.Extensions.Panel.Clicked", access: "required" },
+  { path: "UserInterface.Extensions.Panel.Remove", access: "required" },
+  { path: "UserInterface.Extensions.Panel.Save", access: "required" },
+  { path: "UserInterface.Message.Alert.Display", access: "required" },
+  { path: "UserInterface.Message.Prompt.Display", access: "required" },
+  { path: "UserInterface.Message.Rating.Display", access: "required" },
+  { path: "UserInterface.Message.TextInput.Display", access: "required" },
+];
+
 function trimOrEmpty(value) {
   return typeof value === "string" ? value.trim() : "";
 }
@@ -68,7 +80,8 @@ function createManifestId() {
  * A fresh UUID is generated on every call so each download is a new integration.
  */
 export function buildManifest(values = {}) {
-  const displayName = trimOrEmpty(values.displayName) || "Workspace Integrations Demo";
+  const displayName =
+    trimOrEmpty(values.displayName) || "Workspace Integrations Demo";
   const vendor = trimOrEmpty(values.vendor) || "WXSD";
   const email = trimOrEmpty(values.email) || "wxsd@external.cisco.com";
   const description =
@@ -107,16 +120,7 @@ export function buildManifest(values = {}) {
     ],
     xapiAccess: {
       status: SUPPORTED_STATUSES,
-      commands: [
-        {
-          path: "UserInterface.Extensions.Panel.Save",
-          access: "required",
-        },
-        {
-          path: "UserInterface.Message.Alert.Display",
-          access: "required",
-        },
-      ],
+      commands: SUPPORTED_COMMANDS,
       events: SUPPORTED_EVENTS,
     },
     provisioning: {

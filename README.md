@@ -12,10 +12,6 @@ This GitHub Pages app generates a new integration manifest, exchanges the activa
   </picture>
 </a>
 
-
-
-
-
 ## Overview
 
 The static app in `/webapp` has three tabs.
@@ -65,30 +61,53 @@ Once ready, click **Activate & Monitor**. That hides the decoded payload and rep
             <img alt="Activate & Monitor tab with Client ID, Client Secret, and Activation Code fields" src="screenshots/readme-screenshot-activate-light.png">
         </picture>
     </a>
-    
+
 2. Activate the Webex Workspace Integration by making a PATCH request to the App Url
 
-    ```json
-        {
-        "provisioningState": "completed",
-            "queue": {
-                "state": "enabled"
-            }
-        }
-    ```
+   ```json
+   {
+     "provisioningState": "completed",
+     "queue": {
+       "state": "enabled"
+     }
+   }
+   ```
+
 3. Queries all Workspaces and Devices in your Webex Org so workspace names can be shown on received events, and so you can search for a device to install the demo panel.
+
+   Steps 1-3 above are each shown live under **How activation works**, including the token-lifetime FAQ for the access and refresh tokens.
+
+    <a href="https://wxsd-sales.github.io/workspace-integrations-demo">
+        <picture>
+            <source media="(prefers-color-scheme: dark)" srcset="screenshots/readme-screenshot-activation-dark.png">
+            <source media="(prefers-color-scheme: light)" srcset="screenshots/readme-screenshot-activation-light.png">
+            <img alt="How activation works panel with the access token, PATCH activation, and discover workspaces requests and responses" src="screenshots/readme-screenshot-activation-light.png">
+        </picture>
+    </a>
+
 4. Monitors and displays Device xEvents and xStatus changes via HTTP Long Polling. The web app continuously performs a HTTP GET request against the poll queue URL returned after activating the Workspace Integration in step 2. **Messages Received** plots those queue messages per minute over a rolling one-hour window.
+
+    <a href="https://wxsd-sales.github.io/workspace-integrations-demo">
+        <picture>
+            <source media="(prefers-color-scheme: dark)" srcset="screenshots/readme-screenshot-long-polling-dark.png">
+            <source media="(prefers-color-scheme: light)" srcset="screenshots/readme-screenshot-long-polling-light.png">
+            <img alt="How long polling works panel with the live poll request and a response containing device events and xStatus changes" src="screenshots/readme-screenshot-long-polling-light.png">
+        </picture>
+    </a>
+
 5. Lets you search a workspace or RoomOS product name and save a home-screen UI Extension button (`PanelId` `workspace-integrations-demo`, name **Workspace Integration Demo**) with `UserInterface.Extensions.Panel.Save`. The device list is loaded from the Webex Devices API with `type=roomdesk` and `capability=xapi`, so the button is only offered on devices that can run that xCommand. When that button is tapped, the app shows the `UserInterface.Extensions.Panel.Clicked` event and sends `UserInterface.Message.Alert.Display` back to the same device.
 
+    <a href="https://wxsd-sales.github.io/workspace-integrations-demo">
+        <picture>
+            <source media="(prefers-color-scheme: dark)" srcset="screenshots/readme-screenshot-discovery-dark.png">
+            <source media="(prefers-color-scheme: light)" srcset="screenshots/readme-screenshot-discovery-light.png">
+            <img alt="UI Extensions Demo device search with an installed panel, and the discover devices, panel save, panel clicked, and panel remove requests and responses" src="screenshots/readme-screenshot-discovery-light.png">
+        </picture>
+    </a>
 
 Client ID, Client Secret, refresh tokens, and access tokens stay in browser memory for the session only. They are not written to `localStorage` or to the downloaded manifest.
 
-
-
-
-
 ### Flow Diagram
-
 
 <details>
 
@@ -123,22 +142,21 @@ flowchart LR
 - A modern desktop browser. GitHub Pages calls Webex APIs directly (some browsers block those cross-origin requests). Local testing uses `npm run devProxy` to proxy those calls
 - After the repo is public, enable GitHub Pages with the **GitHub Actions** source so `/.github/workflows/pages.yml` can publish `/webapp`
 
-
 ### Installation Steps:
+
 1. For local development and testing, start the app with the Webex API proxy:
-    ```sh
-    npm run devProxy
-    ```
-    Then open http://127.0.0.1:8080/. The proxy binds to localhost only and forwards allow-listed HTTPS Webex requests so the browser is not blocked by CORS.
-    Static-only serving (no proxy) is still available as `npm run serve`. To refresh the README images after UI changes:
-    ```sh
-    npm run screenshots
-    ```
+   ```sh
+   npm run devProxy
+   ```
+   Then open http://127.0.0.1:8080/. The proxy binds to localhost only and forwards allow-listed HTTPS Webex requests so the browser is not blocked by CORS.
+   Static-only serving (no proxy) is still available as `npm run serve`. To refresh the README images after UI changes:
+   ```sh
+   npm run screenshots
+   ```
 2. On **Create Integration**, optionally show the manifest preview, then click **Download manifest**.
 3. Follow **Control Hub Setup**: upload the JSON under **Workspaces > Integrations**, and copy the Client ID and Client Secret.
 4. Activate the integration in Control Hub and copy the activation code JWT.
 5. Open **Activate & Monitor**, paste Client ID, Client Secret, and Activation Code, then click **Activate & Monitor**. Use **Show payload** to inspect the decoded JWT. After monitoring starts, click **Stop monitoring** to show the credential fields again.
-
 
 ## Demo
 
@@ -146,16 +164,14 @@ Check out our live demo, available [here](https://wxsd-sales.github.io/workspace
 
 *For more demos & PoCs like this, check out our [Webex Labs site](https://collabtoolbox.cisco.com/webex-labs).
 
-
 ## License
 
 All contents are licensed under the MIT license. Please see [license](LICENSE) for details.
-
 
 ## Disclaimer
 
 Everything included is for demo and Proof of Concept purposes only. Use of the site is solely at your own risk. This site may contain links to third party content, which we do not warrant, endorse, or assume liability for. These demos are for Cisco Webex use cases, but are not Official Cisco Webex Branded demos.
 
-
 ## Questions
+
 Please contact the WXSD team at [wxsd@external.cisco.com](mailto:wxsd@external.cisco.com?subject=workspace-integrations-demo) for questions. Or, if you're a Cisco internal employee, reach out to us on the Webex App via our bot (globalexpert@webex.bot). In the "Engagement Type" field, choose the "API/SDK Proof of Concept Integration Development" option to make sure you reach our team.

@@ -2,7 +2,10 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { startStaticServer } from "./lib/server.mjs";
 
-const root = join(resolve(dirname(fileURLToPath(import.meta.url)), ".."), "webapp");
+const root = join(
+  resolve(dirname(fileURLToPath(import.meta.url)), ".."),
+  "webapp",
+);
 const port = Number(process.env.PORT) || 8080;
 
 const { url } = await startStaticServer({ root, port });

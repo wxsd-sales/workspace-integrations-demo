@@ -115,7 +115,11 @@
 
     <main class="app-main">
       <div class="app-content">
-        <div class="tab-bar" role="tablist" aria-label="Workspace integration steps">
+        <div
+          class="tab-bar"
+          role="tablist"
+          aria-label="Workspace integration steps"
+        >
           <button
             class="tab"
             id="tab-create"
@@ -151,7 +155,10 @@
             tabindex="-1"
             data-tab-target="monitor"
           >
-            <span class="icon icon-integrations-regular" aria-hidden="true"></span>
+            <span
+              class="icon icon-integrations-regular"
+              aria-hidden="true"
+            ></span>
             <span class="tab__label">Activate &amp; Monitor</span>
           </button>
         </div>
@@ -174,7 +181,9 @@
 
             <form class="config-form" id="manifest-form" autocomplete="off">
               <div class="field">
-                <label class="field__label" for="manifest-name">Display name</label>
+                <label class="field__label" for="manifest-name"
+                  >Display name</label
+                >
                 <input
                   class="field__input"
                   type="text"
@@ -186,7 +195,9 @@
               </div>
               <div class="field-row">
                 <div class="field">
-                  <label class="field__label" for="manifest-vendor">Vendor</label>
+                  <label class="field__label" for="manifest-vendor"
+                    >Vendor</label
+                  >
                   <input
                     class="field__input"
                     type="text"
@@ -197,7 +208,9 @@
                   />
                 </div>
                 <div class="field">
-                  <label class="field__label" for="manifest-email">Support email</label>
+                  <label class="field__label" for="manifest-email"
+                    >Support email</label
+                  >
                   <input
                     class="field__input"
                     type="email"
@@ -210,7 +223,9 @@
                 </div>
               </div>
               <div class="field">
-                <label class="field__label" for="manifest-description">Description</label>
+                <label class="field__label" for="manifest-description"
+                  >Description</label
+                >
                 <textarea
                   class="field__input field__textarea"
                   id="manifest-description"
@@ -247,7 +262,11 @@
                   </button>
                 </div>
               </div>
-              <pre class="code-output__command" id="manifest-pre" hidden><code id="manifest-preview"></code></pre>
+              <pre
+                class="code-output__command"
+                id="manifest-pre"
+                hidden
+              ><code id="manifest-preview"></code></pre>
               <p
                 class="export-status"
                 id="create-status"
@@ -269,8 +288,8 @@
             <p>
               Upload the downloaded manifest in Control Hub, then copy the
               Client ID, Client Secret, and activation code. Use a shared-mode
-              Webex device in a workspace. Personal-mode devices do not send these
-              notifications.
+              Webex device in a workspace. Personal-mode devices do not send
+              these notifications.
             </p>
             <ol class="setup-steps">
               <li>
@@ -297,10 +316,10 @@
                 disk.
               </li>
               <li>
-                Open the new integration, choose <strong>Activate</strong>,
-                and copy the <strong>activation code</strong>. It is a JWT
-                that this app decodes for <code>oauthUrl</code>,
-                <code>appUrl</code>, and a redacted <code>refreshToken</code>.
+                Open the new integration, choose <strong>Activate</strong>, and
+                copy the <strong>activation code</strong>. It is a JWT that this
+                app decodes for <code>oauthUrl</code>, <code>appUrl</code>, and
+                a redacted <code>refreshToken</code>.
               </li>
               <li>
                 Continue on <strong>Activate &amp; Monitor</strong> and paste
@@ -318,14 +337,27 @@
             tabindex="0"
             hidden
           >
-            <h2>Activate and Monitor Integration</h2>
+            <div class="panel-card__heading">
+              <h2>Activate and Monitor Integration</h2>
+              <button
+                id="demo-integration"
+                type="button"
+                class="icon-button icon-button--with-label secondary-button"
+                title="Fill in the Client ID, Client Secret, and activation code for a simulated integration"
+              >
+                <span
+                  class="icon icon-product-demo-regular"
+                  aria-hidden="true"
+                ></span>
+                <span class="icon-button__label">Demo Integration</span>
+              </button>
+            </div>
             <p>
               Paste the Client ID, Client Secret, and activation code from
               Control Hub. Optionally show the decoded JWT payload. Click
-              <strong>Activate &amp; Monitor</strong> to exchange the
-              refresh token for an access token, look up workspace names,
-              activate long polling, and stream device xStatus and xEvent
-              notifications.
+              <strong>Activate &amp; Monitor</strong> to exchange the refresh
+              token for an access token, look up workspace names, activate long
+              polling, and stream device xStatus and xEvent notifications.
             </p>
 
             <form class="config-form" id="activate-form" autocomplete="off">
@@ -343,7 +375,9 @@
                 />
               </div>
               <div class="field">
-                <label class="field__label" for="client-secret">Client Secret</label>
+                <label class="field__label" for="client-secret"
+                  >Client Secret</label
+                >
                 <input
                   class="field__input"
                   type="password"
@@ -360,7 +394,9 @@
                 >
               </div>
               <div class="field">
-                <label class="field__label" for="activation-code">Activation Code</label>
+                <label class="field__label" for="activation-code"
+                  >Activation Code</label
+                >
                 <textarea
                   class="field__input field__textarea field__mono"
                   id="activation-code"
@@ -374,7 +410,11 @@
               </div>
             </form>
 
-            <p class="credentials-placeholder" id="activate-hidden-notice" hidden>
+            <p
+              class="credentials-placeholder"
+              id="activate-hidden-notice"
+              hidden
+            >
               Monitoring is active. Click <strong>Stop monitoring</strong> to
               show Client ID, Client Secret, and Activation Code again.
             </p>
@@ -385,14 +425,22 @@
                 <button
                   id="toggle-payload"
                   type="button"
-                  class="secondary-button"
+                  class="icon-button icon-button--with-label secondary-button"
                   aria-expanded="false"
                   aria-controls="decoded-pre"
                 >
-                  Show payload
+                  <span
+                    class="icon icon-show-regular"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="icon-button__label">Show payload</span>
                 </button>
               </div>
-              <pre class="code-output__command" id="decoded-pre" hidden><code id="decoded-body"></code></pre>
+              <pre
+                class="code-output__command"
+                id="decoded-pre"
+                hidden
+              ><code id="decoded-body"></code></pre>
             </div>
 
             <div class="step-actions">
@@ -444,6 +492,69 @@
 
             <div class="stat-row" id="monitor-stats" hidden></div>
 
+            <div class="monitor-section" id="activation-requests-section">
+              <div class="section-heading">
+                <h3 class="section-title">
+                  <span
+                    class="icon icon-code-block-regular"
+                    aria-hidden="true"
+                  ></span>
+                  How activation works
+                </h3>
+                <button
+                  id="toggle-activation-requests"
+                  type="button"
+                  class="icon-button icon-button--with-label secondary-button"
+                  aria-expanded="false"
+                  aria-controls="activation-requests-body"
+                >
+                  <span
+                    class="icon icon-show-regular"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="icon-button__label">Show requests</span>
+                </button>
+              </div>
+              <div
+                class="request-detail-list"
+                id="activation-requests-body"
+                hidden
+              >
+                <div class="request-detail">
+                  <h4 class="request-detail__title">1. Get an access token</h4>
+                  <p class="request-detail__hint">
+                    HTTP POST to the <code>oauthUrl</code> from the activation
+                    payload, exchanging the refresh token for an access token.
+                    Repeated automatically whenever the token is close to
+                    expiry.
+                  </p>
+                  <div class="api-exchange" id="request-token"></div>
+                </div>
+                <div class="request-detail">
+                  <h4 class="request-detail__title">
+                    2. Activate the integration and enable long polling
+                  </h4>
+                  <p class="request-detail__hint">
+                    HTTP PATCH to the <code>appUrl</code>, setting
+                    <code>provisioningState</code> to <code>completed</code> and
+                    enabling the notification queue. The response includes the
+                    poll URL used below.
+                  </p>
+                  <div class="api-exchange" id="request-activate"></div>
+                </div>
+                <div class="request-detail">
+                  <h4 class="request-detail__title">3. Discover workspaces</h4>
+                  <p class="request-detail__hint">
+                    HTTP GET against the Webex Workspaces API, paginated using
+                    the response <code>Link</code> header, used to show
+                    workspace names on received notifications. Queried once the
+                    integration is activated, not on every device search.
+                  </p>
+                  <div class="api-exchange" id="request-workspaces"></div>
+                </div>
+              </div>
+            </div>
+
             <div class="monitor-section" id="message-chart-section" hidden>
               <h3 class="section-title">
                 <span
@@ -458,20 +569,23 @@
             <div class="monitor-section" id="panel-install" hidden>
               <h3 class="section-title">
                 <span class="icon icon-tap-regular" aria-hidden="true"></span>
-                Install demo panel
+                UI Extensions Demo
               </h3>
               <p>
-                Search a workspace or RoomOS product name, then save a
-                home-screen button named
-                <strong>Workspace Integration Demo</strong>. Only RoomOS devices
-                with xAPI are listed. Tapping the button sends a
-                <code>UserInterface.Extensions.Panel.Clicked</code>
-                event. This app shows that event and displays an on-screen alert
-                on the same device.
+                Search for devices and install a clickable UI Extension Panel
+                (Action Button). This demo will monitor for the clicked events
+                triggered with the matching Panel ID and display an alert on the
+                device.
               </p>
               <div class="field">
-                <label class="field__label" for="device-search">Search workspace or device</label>
-                <form class="search-row" id="device-search-form" autocomplete="off">
+                <label class="field__label" for="device-search"
+                  >Search workspace or device</label
+                >
+                <form
+                  class="search-row"
+                  id="device-search-form"
+                  autocomplete="off"
+                >
                   <input
                     class="field__input"
                     type="search"
@@ -487,7 +601,10 @@
                     type="submit"
                     class="icon-button icon-button--with-label secondary-button"
                   >
-                    <span class="icon icon-search-regular" aria-hidden="true"></span>
+                    <span
+                      class="icon icon-search-regular"
+                      aria-hidden="true"
+                    ></span>
                     <span class="icon-button__label">Search</span>
                   </button>
                 </form>
@@ -495,30 +612,198 @@
               <div class="device-results" id="device-search-results"></div>
             </div>
 
-            <div class="monitor-section">
-              <h3 class="section-title">
-                <span
-                  class="icon icon-device-in-room-regular"
-                  aria-hidden="true"
-                ></span>
-                Workspaces
-              </h3>
-              <div class="workspace-list" id="workspace-grid"></div>
+            <div class="monitor-section" id="discovery-requests-section">
+              <div class="section-heading">
+                <h3 class="section-title">
+                  <span
+                    class="icon icon-data-management-regular"
+                    aria-hidden="true"
+                  ></span>
+                  How discovery &amp; the panel save work
+                </h3>
+                <button
+                  id="toggle-discovery-requests"
+                  type="button"
+                  class="icon-button icon-button--with-label secondary-button"
+                  aria-expanded="false"
+                  aria-controls="discovery-requests-body"
+                >
+                  <span
+                    class="icon icon-show-regular"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="icon-button__label">Show requests</span>
+                </button>
+              </div>
+              <div
+                class="request-detail-list"
+                id="discovery-requests-body"
+                hidden
+              >
+                <div class="request-detail">
+                  <h4 class="request-detail__title">1. Discover devices</h4>
+                  <p class="request-detail__hint">
+                    HTTP GET against the Webex Devices API, filtered to
+                    <code>type=roomdesk</code> and
+                    <code>capability=xapi</code> so only devices that can run
+                    the demo panel are listed.
+                  </p>
+                  <div class="api-exchange" id="request-devices"></div>
+                </div>
+                <div class="request-detail">
+                  <h4 class="request-detail__title">
+                    2. Save the demo panel (Cloud xAPI)
+                  </h4>
+                  <p class="request-detail__hint">
+                    HTTP POST to the device's Cloud xAPI command endpoint,
+                    running
+                    <code>UserInterface.Extensions.Panel.Save</code> with the
+                    panel XML as the request body. Sent when you click
+                    <strong>Save demo panel</strong> above.
+                  </p>
+                  <div class="api-exchange" id="request-panel-save"></div>
+                </div>
+                <div class="request-detail">
+                  <h4 class="request-detail__title">
+                    3. Remotely trigger the panel click (Cloud xAPI)
+                  </h4>
+                  <p class="request-detail__hint">
+                    HTTP POST to the device's Cloud xAPI command endpoint,
+                    running
+                    <code>UserInterface.Extensions.Panel.Clicked</code> with the
+                    panel's ID so a click can be triggered without physically
+                    tapping the device. Sent when you click
+                    <strong>Trigger panel clicked</strong> above.
+                  </p>
+                  <div class="api-exchange" id="request-panel-clicked"></div>
+                </div>
+                <div class="request-detail">
+                  <h4 class="request-detail__title">
+                    4. Remove the demo panel (Cloud xAPI)
+                  </h4>
+                  <p class="request-detail__hint">
+                    HTTP POST to the device's Cloud xAPI command endpoint,
+                    running
+                    <code>UserInterface.Extensions.Panel.Remove</code> with the
+                    panel's ID to delete the button from the device. Sent when
+                    you click <strong>Delete panel</strong> above.
+                  </p>
+                  <div class="api-exchange" id="request-panel-remove"></div>
+                </div>
+              </div>
             </div>
 
-            <div class="monitor-section">
-              <h3 class="section-title">
-                <span
-                  class="icon icon-cloud-download-regular"
-                  aria-hidden="true"
-                ></span>
-                Live notifications
-              </h3>
-              <div
-                class="activity-feed"
-                id="activity-feed"
-                aria-live="polite"
-              ></div>
+            <div class="monitor-section" id="poll-requests-section">
+              <div class="section-heading">
+                <h3 class="section-title">
+                  <span
+                    class="icon icon-cloud-download-regular"
+                    aria-hidden="true"
+                  ></span>
+                  How long polling works
+                </h3>
+                <button
+                  id="toggle-poll-requests"
+                  type="button"
+                  class="icon-button icon-button--with-label secondary-button"
+                  aria-expanded="false"
+                  aria-controls="poll-requests-body"
+                >
+                  <span
+                    class="icon icon-show-regular"
+                    aria-hidden="true"
+                  ></span>
+                  <span class="icon-button__label">Show requests</span>
+                </button>
+              </div>
+              <div class="request-detail-list" id="poll-requests-body" hidden>
+                <div class="request-detail">
+                  <h4 class="request-detail__title">
+                    Long poll for notifications
+                  </h4>
+                  <p class="request-detail__hint">
+                    HTTP GET against the queue poll URL. Each response can
+                    include device messages and a new poll URL, and this repeats
+                    for as long as monitoring runs.
+                  </p>
+                  <div class="api-exchange" id="request-poll"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="monitor-columns">
+              <div class="monitor-section">
+                <div class="section-heading">
+                  <h3 class="section-title">
+                    <span
+                      class="icon icon-cloud-download-regular"
+                      aria-hidden="true"
+                    ></span>
+                    Live notifications
+                  </h3>
+                  <span
+                    class="poll-status-pill"
+                    id="poll-status-pill"
+                    hidden
+                  ></span>
+                </div>
+                <div class="poll-meter" id="poll-meter" hidden>
+                  <div
+                    class="poll-meter__bar"
+                    id="poll-meter-track"
+                    role="progressbar"
+                    aria-label="Long poll connection duration"
+                    aria-valuemin="0"
+                    aria-valuemax="20"
+                    aria-valuenow="0"
+                  >
+                    <div class="poll-meter__track">
+                      <div class="poll-meter__fill" id="poll-meter-fill"></div>
+                    </div>
+                    <div class="poll-meter__markers" aria-hidden="true">
+                      <span class="poll-meter__marker"></span>
+                      <span class="poll-meter__marker"></span>
+                      <span class="poll-meter__marker"></span>
+                      <span class="poll-meter__marker"></span>
+                      <span class="poll-meter__marker"></span>
+                    </div>
+                  </div>
+                  <div class="poll-meter__labels" aria-hidden="true">
+                    <span>0s</span>
+                    <span>20s</span>
+                  </div>
+                </div>
+                <div class="activity-feed-wrap">
+                  <button
+                    id="feed-new-messages"
+                    type="button"
+                    class="feed-new-messages"
+                    hidden
+                  >
+                    <span>New Notifications</span>
+                    <span
+                      class="icon icon-arrow-up-regular"
+                      aria-hidden="true"
+                    ></span>
+                  </button>
+                  <div
+                    class="activity-feed"
+                    id="activity-feed"
+                    aria-live="polite"
+                  ></div>
+                </div>
+              </div>
+
+              <div class="monitor-section">
+                <h3 class="section-title">
+                  <span
+                    class="icon icon-device-in-room-regular"
+                    aria-hidden="true"
+                  ></span>
+                  Workspaces
+                </h3>
+                <div class="workspace-list" id="workspace-grid"></div>
+              </div>
             </div>
           </section>
         </div>
