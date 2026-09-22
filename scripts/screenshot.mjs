@@ -57,6 +57,29 @@ function resolveChrome() {
   );
 }
 
+// Headless Chrome on macOS logs some harmless noise to stderr on every run
+// (display-link and sandbox task_policy_set warnings unrelated to the
+// screenshot itself). Filter known lines out so real errors stay visible.
+const KNOWN_NOISE = [
+  /CVDisplayLinkCreateWithCGDisplay failed/,
+  /task_policy_set \w+_POLICY/,
+  /Trying to load the allocator multiple times/,
+];
+
+function forwardFilteredStderr(stream) {
+  let buffered = "";
+  stream.on("data", (chunk) => {
+    buffered += chunk;
+    const lines = buffered.split("\n");
+    buffered = lines.pop();
+    for (const line of lines) {
+      if (!KNOWN_NOISE.some((pattern) => pattern.test(line))) {
+        process.stderr.write(`${line}\n`);
+      }
+    }
+  });
+}
+
 function capture(chromeBin, url, outPath, { width, height }) {
   return new Promise((resolvePromise, reject) => {
     const args = [
@@ -71,7 +94,8 @@ function capture(chromeBin, url, outPath, { width, height }) {
       `--screenshot=${outPath}`,
       url,
     ];
-    const child = spawn(chromeBin, args, { stdio: "inherit" });
+    const child = spawn(chromeBin, args, { stdio: ["ignore", "inherit", "pipe"] });
+    forwardFilteredStderr(child.stderr);
     child.on("error", reject);
     child.on("exit", (code) =>
       code === 0
@@ -107,27 +131,27 @@ const targets = [
   },
   {
     name: "readme-screenshot-monitor",
-    path: "/?preview=monitor",
+    path: "/?preview=monitor&focus=overview",
     width: DEFAULT_WIDTH,
-    height: 4700,
+    height: 1340,
   },
   {
     name: "readme-screenshot-activation",
     path: "/?preview=monitor&focus=activation",
     width: DEFAULT_WIDTH,
-    height: 2950,
+    height: 420,
   },
   {
     name: "readme-screenshot-long-polling",
     path: "/?preview=monitor&focus=long-polling",
     width: DEFAULT_WIDTH,
-    height: 2000,
+    height: 420,
   },
   {
     name: "readme-screenshot-discovery",
     path: "/?preview=monitor&focus=discovery",
     width: DEFAULT_WIDTH,
-    height: 3350,
+    height: 700,
   },
 ];
 

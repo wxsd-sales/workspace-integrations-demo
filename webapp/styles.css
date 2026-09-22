@@ -1377,6 +1377,7 @@ h2 {
   align-content: start;
   gap: 8px;
   min-height: 0;
+  max-height: 60vh;
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -1537,6 +1538,7 @@ h2 {
   gap: 10px;
   flex: 1;
   min-height: 0;
+  max-height: 60vh;
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -1793,15 +1795,5 @@ h2 {
 
   .monitor-columns {
     grid-template-columns: 1fr;
-  }
-
-  /* Side by side on desktop, both columns grow to fit their content and
-     the page scrolls. Stacked on mobile, that would mean scrolling through
-     the entire live-notifications feed before reaching the workspace
-     cards below it, so each list gets its own capped, scrollable height. */
-  .workspace-list,
-  .activity-feed {
-    max-height: 60vh;
-    overflow-y: auto;
   }
 }

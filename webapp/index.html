@@ -515,6 +515,10 @@
                   <span class="icon-button__label">Show requests</span>
                 </button>
               </div>
+              <p>
+                Click <strong>Show requests</strong> for a detailed breakdown
+                of the HTTP requests this step makes.
+              </p>
               <div
                 class="request-detail-list"
                 id="activation-requests-body"
@@ -553,17 +557,6 @@
                   <div class="api-exchange" id="request-workspaces"></div>
                 </div>
               </div>
-            </div>
-
-            <div class="monitor-section" id="message-chart-section" hidden>
-              <h3 class="section-title">
-                <span
-                  class="icon icon-area-chart-regular"
-                  aria-hidden="true"
-                ></span>
-                Messages Received
-              </h3>
-              <div class="message-chart" id="message-chart"></div>
             </div>
 
             <div class="monitor-section" id="panel-install" hidden>
@@ -635,6 +628,10 @@
                   <span class="icon-button__label">Show requests</span>
                 </button>
               </div>
+              <p>
+                Click <strong>Show requests</strong> for a detailed breakdown
+                of the HTTP requests these actions make.
+              </p>
               <div
                 class="request-detail-list"
                 id="discovery-requests-body"
@@ -716,6 +713,10 @@
                   <span class="icon-button__label">Show requests</span>
                 </button>
               </div>
+              <p>
+                Click <strong>Show requests</strong> for a detailed breakdown
+                of the HTTP request this makes.
+              </p>
               <div class="request-detail-list" id="poll-requests-body" hidden>
                 <div class="request-detail">
                   <h4 class="request-detail__title">
@@ -731,7 +732,18 @@
               </div>
             </div>
 
-            <div class="monitor-columns">
+            <div class="monitor-section" id="message-chart-section" hidden>
+              <h3 class="section-title">
+                <span
+                  class="icon icon-area-chart-regular"
+                  aria-hidden="true"
+                ></span>
+                Messages Received
+              </h3>
+              <div class="message-chart" id="message-chart"></div>
+            </div>
+
+            <div class="monitor-columns" id="monitor-columns">
               <div class="monitor-section">
                 <div class="section-heading">
                   <h3 class="section-title">

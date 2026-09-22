@@ -8,7 +8,7 @@ This GitHub Pages app generates a new integration manifest, exchanges the activa
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="screenshots/readme-screenshot-monitor-dark.png">
     <source media="(prefers-color-scheme: light)" srcset="screenshots/readme-screenshot-monitor-light.png">
-    <img alt="Activate & Monitor tab showing workspace cards and live xStatus and xEvent notifications" src="screenshots/readme-screenshot-monitor-light.png">
+    <img alt="Activate & Monitor tab showing the Messages Received chart, live xStatus and xEvent notifications, and workspace cards" src="screenshots/readme-screenshot-monitor-light.png">
   </picture>
 </a>
 
@@ -75,13 +75,13 @@ Once ready, click **Activate & Monitor**. That hides the decoded payload and rep
 
 3. Queries all Workspaces and Devices in your Webex Org so workspace names can be shown on received events, and so you can search for a device to install the demo panel.
 
-   Steps 1-3 above are each shown live under **How activation works**, including the token-lifetime FAQ for the access and refresh tokens.
+   Steps 1-3 above are each documented under **How activation works**, including a token-lifetime FAQ for the access and refresh tokens. Click **Show requests** to see the exact HTTP request and response for each step.
 
     <a href="https://wxsd-sales.github.io/workspace-integrations-demo">
         <picture>
             <source media="(prefers-color-scheme: dark)" srcset="screenshots/readme-screenshot-activation-dark.png">
             <source media="(prefers-color-scheme: light)" srcset="screenshots/readme-screenshot-activation-light.png">
-            <img alt="How activation works panel with the access token, PATCH activation, and discover workspaces requests and responses" src="screenshots/readme-screenshot-activation-light.png">
+            <img alt="How activation works panel, collapsed, with a Show requests button to reveal the access token, PATCH activation, and discover workspaces requests and responses" src="screenshots/readme-screenshot-activation-light.png">
         </picture>
     </a>
 
@@ -91,7 +91,7 @@ Once ready, click **Activate & Monitor**. That hides the decoded payload and rep
         <picture>
             <source media="(prefers-color-scheme: dark)" srcset="screenshots/readme-screenshot-long-polling-dark.png">
             <source media="(prefers-color-scheme: light)" srcset="screenshots/readme-screenshot-long-polling-light.png">
-            <img alt="How long polling works panel with the live poll request and a response containing device events and xStatus changes" src="screenshots/readme-screenshot-long-polling-light.png">
+            <img alt="How long polling works panel, collapsed, with a Show requests button to reveal the live poll request and response" src="screenshots/readme-screenshot-long-polling-light.png">
         </picture>
     </a>
 
@@ -101,7 +101,7 @@ Once ready, click **Activate & Monitor**. That hides the decoded payload and rep
         <picture>
             <source media="(prefers-color-scheme: dark)" srcset="screenshots/readme-screenshot-discovery-dark.png">
             <source media="(prefers-color-scheme: light)" srcset="screenshots/readme-screenshot-discovery-light.png">
-            <img alt="UI Extensions Demo device search with an installed panel, and the discover devices, panel save, panel clicked, and panel remove requests and responses" src="screenshots/readme-screenshot-discovery-light.png">
+            <img alt="UI Extensions Demo device search with an installed panel, and a collapsed How discovery & the panel save work panel with a Show requests button" src="screenshots/readme-screenshot-discovery-light.png">
         </picture>
     </a>
 

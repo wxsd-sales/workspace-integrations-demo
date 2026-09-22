@@ -991,6 +991,7 @@ const PREVIEW_FOCUS_SECTION_IDS = {
   activation: ["activation-requests-section"],
   "long-polling": ["poll-requests-section"],
   discovery: ["panel-install", "discovery-requests-section"],
+  overview: ["message-chart-section", "monitor-columns"],
 };
 
 (function initMonitor() {
@@ -2830,12 +2831,6 @@ const PREVIEW_FOCUS_SECTION_IDS = {
     startPollMeter(POLL_METER_PREVIEW_ELAPSED_MS);
 
     buildPreviewRequestLog();
-    // Only auto-expand the panel a focused screenshot is showing off; the
-    // full-page (unfocused) capture keeps them collapsed, same as a real
-    // first-time session.
-    state.activationRequestsOpen = previewFocus === "activation";
-    state.pollRequestsOpen = previewFocus === "long-polling";
-    state.discoveryRequestsOpen = previewFocus === "discovery";
   }
 
   syncPayloadToggle();
