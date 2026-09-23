@@ -243,7 +243,11 @@ async function requestJson(url, options = {}) {
   if (!headers.has("Accept")) {
     headers.set("Accept", "application/json");
   }
-  headers.set("Cache-Control", "no-store");
+  // No explicit Cache-Control header: it isn't CORS-safelisted, and the fetch
+  // `cache: "no-store"` option below already prevents caching without forcing
+  // a preflight OPTIONS. webexapis.com's /v1/access_token endpoint doesn't
+  // grant CORS on its preflight response, so a header that triggers one for
+  // no functional reason blocks the whole request.
 
   const snapshot = logKey
     ? {

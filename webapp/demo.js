@@ -21,7 +21,6 @@ const DEMO_WEBEXAPIS_BASE_URL = "https://webexapis.com/v1";
 const DEMO_REQUEST_HEADERS = {
   Authorization: "Bearer ***",
   Accept: "application/json",
-  "Cache-Control": "no-store",
 };
 
 const XAPI_COMMAND_LOG_KEYS = {
@@ -161,7 +160,6 @@ export function createDemoIntegration() {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           Accept: "application/json",
-          "Cache-Control": "no-store",
         },
         body: {
           grant_type: "refresh_token",
@@ -213,7 +211,6 @@ export function createDemoIntegration() {
           Authorization: "Bearer ***",
           "Content-Type": "application/json",
           Accept: "application/json",
-          "Cache-Control": "no-store",
         },
         body: { provisioningState: "completed", queue: { state: "enabled" } },
         status: 200,
@@ -286,7 +283,6 @@ export function createDemoIntegration() {
             Authorization: "Bearer ***",
             "Content-Type": "application/json",
             Accept: "application/json",
-            "Cache-Control": "no-store",
           },
           body: {
             deviceId,

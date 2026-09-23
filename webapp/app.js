@@ -860,7 +860,6 @@ function formatChartClock(ms) {
 const PREVIEW_REQUEST_HEADERS = {
   Authorization: "Bearer ***",
   Accept: "application/json",
-  "Cache-Control": "no-store",
 };
 
 // Populates the "Show requests" panels with a realistic redacted exchange
@@ -877,7 +876,6 @@ function buildPreviewRequestLog() {
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
       Accept: "application/json",
-      "Cache-Control": "no-store",
     },
     body: {
       grant_type: "refresh_token",
@@ -910,7 +908,6 @@ function buildPreviewRequestLog() {
       Authorization: "Bearer ***",
       "Content-Type": "application/json",
       Accept: "application/json",
-      "Cache-Control": "no-store",
     },
     body: { provisioningState: "completed", queue: { state: "enabled" } },
     status: 200,
@@ -943,7 +940,6 @@ function buildPreviewRequestLog() {
     Authorization: "Bearer ***",
     "Content-Type": "application/json",
     Accept: "application/json",
-    "Cache-Control": "no-store",
   };
   primeRequestLogForPreview("panelSave", {
     method: "POST",
@@ -1233,7 +1229,6 @@ const PREVIEW_FOCUS_SECTION_IDS = {
         Authorization: "Bearer ***",
         "Content-Type": "application/json",
         Accept: "application/json",
-        "Cache-Control": "no-store",
       },
       body,
     };
